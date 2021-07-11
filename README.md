@@ -1,6 +1,8 @@
 # spring-boot-practice
 practice spring boot
 
+Hawhow 課程筆記，順便練習MD
+
 
 
 # CH5 - Spring JDBC
