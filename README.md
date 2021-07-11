@@ -82,12 +82,12 @@ spring.datasource.password = springboot
    ```java
    @GetMapping("/{studentId}")
    public Student select(@PathVariable Integer studentId) {
-   	Map<String, Object> map = new HashMap<>();
-   	String sql = "SELECT id, name FROM student WHERE id = :id";
+     Map<String, Object> map = new HashMap<>();
+     String sql = "SELECT id, name FROM student WHERE id = :id";
      map.put("id", studentId);
    
-   	return namedParameterJdbcTemplate.query(sql, map, rs -> {
-   		Student student = new Student();
+     return namedParameterJdbcTemplate.query(sql, map, rs -> {
+       Student student = new Student();
        student.setId(rs.getInt("id"));
        student.setName(rs.getString("name"));
        return student;
