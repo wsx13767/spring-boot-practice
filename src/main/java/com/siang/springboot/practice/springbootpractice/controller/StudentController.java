@@ -47,7 +47,7 @@ public class StudentController {
         return "Student id " + student.getId() + " name has update to " + student.getName();
     }
 
-    @GetMapping
+    @GetMapping("findAll")
     public List<Student> selectAll() {
         return namedParameterJdbcTemplate.query("SELECT id, name FROM student",(rs, index) -> {
             Student student = new Student();
@@ -64,10 +64,14 @@ public class StudentController {
         map.put("id", studentId);
 
         return namedParameterJdbcTemplate.query(sql, map, rs -> {
-            Student student = new Student();
-            student.setId(rs.getInt("id"));
-            student.setName(rs.getString("name"));
-            return student;
+            if (rs.next()) {
+                Student student = new Student();
+                student.setId(rs.getInt("id"));
+                student.setName(rs.getString("name"));
+                return student;
+            } else {
+                return null;
+            }
         });
     }
 }
