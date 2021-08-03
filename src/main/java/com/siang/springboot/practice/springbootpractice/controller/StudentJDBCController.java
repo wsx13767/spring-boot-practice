@@ -2,6 +2,7 @@ package com.siang.springboot.practice.springbootpractice.controller;
 
 import com.siang.springboot.practice.springbootpractice.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -13,14 +14,15 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/student")
-public class StudentController {
+@RequestMapping("/student/jdbc")
+public class StudentJDBCController {
 
     @Autowired
+    @Qualifier("myJdbcJdbcTemplate")
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
-    @PostMapping
-    public String insert(@RequestBody Student student) {
+    @PostMapping("/insert")
+    public String insertWithJDBC(@RequestBody Student student) {
         Map<String, Object> map = new HashMap<>();
         map.put("name", student.getName());
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -29,8 +31,8 @@ public class StudentController {
         return "Student " + student.getName() + " id is " + keyHolder.getKey().intValue();
     }
 
-    @DeleteMapping("/{studentId}")
-    public String delete(@PathVariable Integer studentId) {
+    @DeleteMapping("/delete/{studentId}")
+    public String deleteWithJDBC(@PathVariable Integer studentId) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", studentId);
         namedParameterJdbcTemplate.update("DELETE FROM student WHERE id = :id", map);
@@ -38,8 +40,8 @@ public class StudentController {
         return "Student id " + studentId + " is delete";
     }
 
-    @PutMapping
-    public String update(@RequestBody Student student) {
+    @PutMapping("/update")
+    public String updateWithJDBC(@RequestBody Student student) {
         Map<String, Object> map = new HashMap<>();
         map.put("id", student.getId());
         map.put("name", student.getName());
@@ -47,8 +49,8 @@ public class StudentController {
         return "Student id " + student.getId() + " name has update to " + student.getName();
     }
 
-    @GetMapping("findAll")
-    public List<Student> selectAll() {
+    @GetMapping("/getALL")
+    public List<Student> getALLWithJDBC() {
         return namedParameterJdbcTemplate.query("SELECT id, name FROM student",(rs, index) -> {
             Student student = new Student();
             student.setId(rs.getInt("id"));
@@ -57,8 +59,8 @@ public class StudentController {
         });
     }
 
-    @GetMapping("/{studentId}")
-    public Student select(@PathVariable Integer studentId) {
+    @GetMapping("/getById/{studentId}")
+    public Student getByIdWithJDBC(@PathVariable Integer studentId) {
         Map<String, Object> map = new HashMap<>();
         String sql = "SELECT id, name FROM student WHERE id = :id";
         map.put("id", studentId);

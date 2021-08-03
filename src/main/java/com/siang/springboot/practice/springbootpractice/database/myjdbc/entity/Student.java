@@ -1,4 +1,4 @@
-package com.siang.springboot.practice.springbootpractice.mvc.database.entity;
+package com.siang.springboot.practice.springbootpractice.database.myjdbc.entity;
 
 import javax.persistence.*;
 

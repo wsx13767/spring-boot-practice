@@ -7,7 +7,7 @@ Hawhow 課程筆記，順便練習MD
 
 
 
-## CH5 - Spring JDBC
+## Spring JDBC
 
 >* 以SQL為主
 >* 需自己寫SQL操作資料庫
@@ -112,10 +112,57 @@ spring.datasource.password = springboot
 
 ```mermaid
 graph LR
-    Controller[Controller 負責接收request 驗證請求參數] --> Service[Service 負責業務邏輯] --> Dao[Dao 負責資料庫溝通]
+    Controller["Controller(接收request 驗證請求參數)"] --> Service["Service(業務邏輯)"] --> Dao["Dao(資料庫溝通)"]
 ```
 
-## CH6 - Spring Data JPA
+### Transation
+
+> * 一個交易包含多個資料庫操作，為了令資料達到一制性需一起成功或一起失敗。
+>   * 於Spring中可使用`@Transational` annotation管理資料庫操作，可加註於method或class
+
+### 多個資料庫連線設定
+
+```properties
+spring.datasource.test1.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.test1.jdbc-url=jdbc:mysql://localhost:3306/test1?serverTimezone=Asia/Taipei&characterEncoding=utf-8
+spring.datasource.test1.username=root
+spring.datasource.test1.password=springboot
+
+spring.datasource.myjdbc.driver-class-name = com.mysql.cj.jdbc.Driver
+spring.datasource.myjdbc.jdbc-url = jdbc:mysql://localhost:3306/myjdbc?serverTimezone=Asia/Taipei&characterEncoding=utf-8
+spring.datasource.myjdbc.username = root
+spring.datasource.myjdbc.password = springboot
+```
+
+```java
+...
+@Bean
+@ConfigurationProperties(prefix = "spring.datasource.test1")
+public DataSource test1DataSource() {
+    return DataSourceBuilder.create().build();
+}
+
+@Bean
+public NamedParameterJdbcTemplate test1JdbcTemplate(
+  @Qualifier("test1DataSource") DataSource dataSource) {
+    return new NamedParameterJdbcTemplate(dataSource);
+}
+
+@Bean
+@ConfigurationProperties(prefix = "spring.datasource.myjdbc")
+public DataSource myjdbcDataSource() {
+    return DataSourceBuilder.create().build();
+}
+
+@Bean
+public NamedParameterJdbcTemplate myJdbcJdbcTemplate(
+        @Qualifier("myjdbcDataSource") DataSource dataSource) {
+    return new NamedParameterJdbcTemplate(dataSource);
+}
+...
+```
+
+## Spring Data JPA
 
 > * 以JAVA Object為主
 > * 由ORM框架產生SQL操作資料庫
@@ -175,5 +222,49 @@ public class StudentController {
 }
 ```
 
-   
+   ### 多個資料庫連線設定
+
+```java
+@EnableTransactionManagement
+@EnableJpaRepositories(entityManagerFactoryRef = "myJdbcEntityManagerFactory",
+        transactionManagerRef = "myJdbcTransactionManager",
+        basePackages = "com.siang.springboot.practice.springbootpractice.database.myjdbc.repository")
+@Configuration
+public class MyJdbcDataSourceConfig {
+
+    @Primary // 配置多個資料庫時，一定要有一個掛上此annotation
+    @Bean
+    @ConfigurationProperties(prefix = "spring.datasource.myjdbc")
+    public DataSource myjdbcDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+    @Bean
+    public NamedParameterJdbcTemplate myJdbcJdbcTemplate(
+            @Qualifier("myjdbcDataSource") DataSource dataSource) {
+        return new NamedParameterJdbcTemplate(dataSource);
+    }
+
+    @Primary
+    @Bean
+    public LocalContainerEntityManagerFactoryBean myJdbcEntityManagerFactory(
+            EntityManagerFactoryBuilder builder,
+            @Qualifier("myjdbcDataSource") DataSource dataSource) {
+        return builder.dataSource(dataSource)
+                .packages("com.siang.springboot.practice.springbootpractice.database.myjdbc.entity")
+                .persistenceUnit("myJdbc").build();
+    }
+
+    @Primary
+    @Bean
+    public PlatformTransactionManager myJdbcTransactionManager(
+            @Qualifier("myJdbcEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
+        return new JpaTransactionManager(entityManagerFactory);
+    }
+}
+```
+
+
+
+See [菜鳥工程師：肉豬](https://matthung0807.blogspot.com/2019/09/spring-data-jpa-multiple-datasource.html).
 

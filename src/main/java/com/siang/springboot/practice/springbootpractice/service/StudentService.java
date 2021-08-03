@@ -1,7 +1,7 @@
-package com.siang.springboot.practice.springbootpractice.mvc.service;
+package com.siang.springboot.practice.springbootpractice.service;
 
 import com.siang.springboot.practice.springbootpractice.model.Student;
-import com.siang.springboot.practice.springbootpractice.mvc.dao.StudentDao;
+import com.siang.springboot.practice.springbootpractice.dao.StudentDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
