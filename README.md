@@ -264,6 +264,33 @@ public class MyJdbcDataSourceConfig {
 }
 ```
 
+### `@Query` annotation
+
+> * 可以寫出較複雜的查詢
+
+```java
+public interface StudentRepository extends CrudRepository<Student, Integer> {
+    /**
+     * 可以直接帶入參數不需任何annotation，parameter的命名需與Student field Name相同
+     */
+    List<Student> findByName(String name);
+    Student findByIdAndName(Integer id, String name);
+
+    /**
+     * 使用Query annotation 建立查詢的SQL，?接的數字為parameter的位置
+     * 使用JPQL語法查詢
+     */
+    @Query("SELECT s FROM Student s WHERE s.sex = ?1")
+    List<Student> findBySex(String sex);
+  
+    /**
+     * nativeQuery = false, 可以以原始的sql查詢
+     */
+    @Query("SELECT * FROM Student WHERE sex = ?1", nativeQuery = false)
+    List<Student> findBySex(String sex);
+}
+```
+
 
 
 See [菜鳥工程師：肉豬](https://matthung0807.blogspot.com/2019/09/spring-data-jpa-multiple-datasource.html).

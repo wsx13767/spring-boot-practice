@@ -1,6 +1,6 @@
 package com.siang.springboot.practice.springbootpractice.controller;
 
-import com.siang.springboot.practice.springbootpractice.model.Student;
+import com.siang.springboot.practice.springbootpractice.database.myjdbc.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;

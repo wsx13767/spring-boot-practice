@@ -14,6 +14,9 @@ public class Student {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "sex")
+    private String sex;
+
     public Integer getId() {
         return id;
     }
@@ -28,5 +31,13 @@ public class Student {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }
