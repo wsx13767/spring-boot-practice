@@ -13,6 +13,6 @@ public interface StudentRepository extends CrudRepository<Student, Integer> {
 
     Student findByIdAndName(Integer id, String name);
 
-    @Query(value = "SELECT s FROM Student s WHERE s.sex = ?1", nativeQuery = true)
+    @Query(value = "SELECT s FROM Student s WHERE s.sex = ?1")
     List<Student> findBySex(String sex);
 }
