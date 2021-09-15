@@ -232,7 +232,7 @@ public class StudentController {
 @Configuration
 public class MyJdbcDataSourceConfig {
 
-    @Primary // 配置多個資料庫時，一定要有一個掛上此annotation
+    @Primary // 配置多個資料庫時，一定要有一個掛上此annotation，判別預設的db
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.myjdbc")
     public DataSource myjdbcDataSource() {
