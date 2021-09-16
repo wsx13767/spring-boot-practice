@@ -7,6 +7,44 @@ Hawhow 課程筆記，順便練習MD
 
 
 
+## Component
+
+> * 如果沒有額外設定scope，預設皆為`singleton`
+> * 只要有繼承`@Component`，都會被spring產生實例放入bean map
+> * spring會針對有`@Autowired`的「Property」或「Method」，並從bean map找出相對應的bean並放入
+> * 如果同一個介面有兩個實作程式，需再加上`@Qualifier`，加上value設定指向某一個實作
+
+```java
+public interface Printer {
+  String info();
+}
+
+@Component("hp")
+public class HPPrinter implements Printer {
+  @Override
+  public String info() { return "hp"; }
+}
+@Component("sharp")
+public class SharpPrinter implements Printer {
+  @Override
+  public String info() { return "sharp"; }
+}
+@Component
+public class Controller {
+  @Autowired
+  @Qualifier("hp")
+  private Printer hp;
+  
+  @Autowired
+  @Qualifier("sharp")
+  private Printer sharp;
+}
+```
+
+
+
+
+
 ## Spring JDBC
 
 >* 以SQL為主
