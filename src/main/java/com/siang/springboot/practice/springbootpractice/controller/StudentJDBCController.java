@@ -3,6 +3,7 @@ package com.siang.springboot.practice.springbootpractice.controller;
 import com.siang.springboot.practice.springbootpractice.database.myjdbc.entity.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -18,7 +19,7 @@ import java.util.Map;
 public class StudentJDBCController {
 
     @Autowired
-    @Qualifier("myJdbcJdbcTemplate")
+//    @Qualifier("myJdbcTemplate")
     private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     @PostMapping("/insert")

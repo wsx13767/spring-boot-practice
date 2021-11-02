@@ -25,7 +25,7 @@ public class StudentJPAController {
 
     @GetMapping("/getById/{studentId}")
     public Student select(@PathVariable Integer studentId) {
-        return studentService.findById(studentId);
+        return studentRepository.findById(studentId).get();
     }
 
     @GetMapping("/getByName/{name}")

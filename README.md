@@ -329,7 +329,38 @@ public interface StudentRepository extends CrudRepository<Student, Integer> {
 }
 ```
 
-
-
 See [菜鳥工程師：肉豬](https://matthung0807.blogspot.com/2019/09/spring-data-jpa-multiple-datasource.html).
 
+------
+
+### JUnit `@Test`
+
+* `@BeforeAll`,`@AfterAll`皆須為static method
+
+* Controller 測試使用MockMvc
+
+  ```java
+  @SpringBootTest
+  @AutoConfigureMockMvc
+  public class Test {
+    @Autowired
+    private MockMvc mockMvc;
+    // 將dao替換
+    @MockBean
+    private StudentDao studentDao;
+    
+    @Test
+    public void test() {
+      Student mockStudent = new Student();
+      mockStudent.setId(122);
+      mockStudent.setName("Test");
+      // 固定回傳定義好的物件
+      Mockito.when(studentDao.getById(Mockito.any())).thenReturn(mockStudent);
+      
+      Student student = studentDao.getById(2);
+      assertNotNull(student);
+    }
+  }
+  ```
+
+  
