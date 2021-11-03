@@ -2,7 +2,6 @@ package com.siang.springboot.practice.springbootpractice.database.entity;
 
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Objects;
 
 @Entity
 @Table(name = "student")

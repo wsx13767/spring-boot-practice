@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,7 +34,7 @@ class StudentServiceImplTest {
         student.setGraduate(false);
         student.setScore(20.2);
         // 替換studentRepository.findById回傳的物件
-        Mockito.when(studentRepository.findById(Mockito.any())).thenReturn(Optional.of(student));
+        Mockito.when(studentRepository.findById(1)).thenReturn(Optional.of(student));
     }
 
     @Test
@@ -41,5 +42,12 @@ class StudentServiceImplTest {
         Student student = studentService.findById(1);
         assertNotNull(student);
         assertEquals(1, student.getId());
+    }
+
+    @Test
+    public void findIdNull() {
+        assertThrows(NoSuchElementException.class, () -> {
+            studentService.findById(2);
+        });
     }
 }
